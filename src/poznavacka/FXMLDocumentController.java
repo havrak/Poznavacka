@@ -40,7 +40,7 @@ public class FXMLDocumentController {
 
 		private void update() {
 			if (Canvas != null && guessTF != null) {
-				guessTF.setMinWidth(Canvas.getWidth() - 220);
+				guessTF.setMinWidth(Canvas.getWidth() - 438);
 			}
 			if (inGame) {
 				drawPic();
