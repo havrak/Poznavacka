@@ -54,6 +54,11 @@ public class FXMLDocumentController {
 		}
 	}
 
+	// private final String[] taxonomyLevel = {"phylum","subphylum","division","class","subclass","order"};  // taxonomy in English (just translated form czech)
+	// private final String[] taxonomyLevelAbbr = {"PL","SP","DV","CL","SL","OD"};
+	private final String[] taxonomyLevel = {"kmen","podkmen","nadtřída","třída","podtřída","řád"}; 
+	private final String[] taxonomyLevelAbbr = {"KM","PK","NT","TR","PT","RA"};
+	
 	@FXML
 	private Pane pane;
 
@@ -63,7 +68,7 @@ public class FXMLDocumentController {
 
 	@FXML
 	private VBox list;
-	private TextField[] fields = new TextField[6];
+	private TextField[] fields = new TextField[taxonomyLevel.length];
 
 	@FXML
 	private TextField guessTF;
@@ -76,7 +81,9 @@ public class FXMLDocumentController {
 
 	private boolean inGame = false;
 	private String rightAnswer;
-	private final String[] rightList = new String[6];
+	
+
+	private final String[] rightList = new String[taxonomyLevel.length];
 	private int indexOfShown;
 	private boolean displayingAnswer = false;
 	private int guessedRight, listRight;
@@ -89,6 +96,14 @@ public class FXMLDocumentController {
 		this.stage = stage;
 		gc = Canvas.getGraphicsContext2D();
 		gc.setFont(new Font(15));
+		if(taxonomyLevel.length != taxonomyLevelAbbr.length){
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Error");
+			alert.setContentText("Number of abbreviation of taxonomy leves and number of levels is different \n application will be closed");
+			alert.showAndWait();
+			System.exit(1);
+		}
 		try {
 			addFiles(dir);
 		} catch (NullPointerException e) {
@@ -141,41 +156,37 @@ public class FXMLDocumentController {
 	}
 
 	private String prompt(int i) {
-		switch (i) {
-			case 0:
-				return "kmen";
-			case 1:
-				return "podkmen";
-			case 2:
-				return "nadtřída";
-			case 3:
-				return "třída";
-			case 4:
-				return "podtřída";
-			case 5:
-				return "řád";
-			default:
-				return "none";
-		}
+		return taxonomyLevel[i];
 	}
 
 	private int prompt(String str) {
-		switch (str) {
-			case "KM":
-				return 0;
-			case "PK":
-				return 1;
-			case "NT":
-				return 2;
-			case "TR":
-				return 3;
-			case "PT":
-				return 4;
-			case "RA":
-				return 5;
-			default:
-				return -1;
+		for (int i = 0; i < taxonomyLevelAbbr.length; i++) {
+			if(taxonomyLevelAbbr[i].equals(str)){
+				return i;
+			}
 		}
+		return -1;
+//		for (String string : taxonomyLevelAbbr) {
+//			if(string.equals(str)){
+//			
+//			}
+//		}
+//		switch (str) {
+//			case "KM":
+//				return 0;
+//			case "PK":
+//				return 1;
+//			case "NT":
+//				return 2;
+//			case "TR":
+//				return 3;
+//			case "PT":
+//				return 4;
+//			case "RA":
+//				return 5;
+//			default:
+//				return -1;
+//		}
 	}
 
 	@FXML
@@ -250,25 +261,25 @@ public class FXMLDocumentController {
 				} else if (displayingAnswer = !displayingAnswer) {
 					if (guessTF.getText().toLowerCase().trim().equals(rightAnswer)) {
 						gc.setFill(Color.GREEN);
-						gc.fillRect(Canvas.getWidth() / 2 - 110, 20, 220, 40);
+						gc.fillRect(Canvas.getWidth() / 2 - 130, 20, 260, 40);
 						gc.strokeText("Correct Name", Canvas.getWidth() / 2 - 90, 35);
 						guessTF.setText("");
 						guessedRight++;
 					} else {
 						gc.setFill(Color.RED);
-						gc.fillRect(Canvas.getWidth() / 2 - 110, 20, 220, 40);
+						gc.fillRect(Canvas.getWidth() / 2 - 130, 20, 260, 40);
 						gc.strokeText("Wrong Name, Right Name:\n" + rightAnswer, Canvas.getWidth() / 2 - 90, 35);
 						guessTF.setText("");
 					}
 					if (testList()) {
 						gc.setFill(Color.GREEN);
-						gc.fillRect(Canvas.getWidth() / 2 - 110, 60, 220, 100);
-						gc.strokeText("Correct List", Canvas.getWidth() / 2 - 90, 75);
+						gc.fillRect(Canvas.getWidth() / 2 - 130, 60, 260, 100);
+						gc.strokeText("Correct taxonomy", Canvas.getWidth() / 2 - 90, 75);
 						listRight++;
 					} else {
 						gc.setFill(Color.RED);
-						gc.fillRect(Canvas.getWidth() / 2 - 110, 60, 220, 100);
-						gc.strokeText("Wrong List, Right List:\n" + rightList(), Canvas.getWidth() / 2 - 90, 75);
+						gc.fillRect(Canvas.getWidth() / 2 - 130, 60, 260, 100);
+						gc.strokeText("Wrong taxonomy, Right taxonomy:\n" + rightList(), Canvas.getWidth() / 2 - 90, 75);
 						guessTF.setText("");
 					}
 				} else {
