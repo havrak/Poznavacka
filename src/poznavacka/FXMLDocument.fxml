@@ -18,22 +18,24 @@
       <HBox alignment="BOTTOM_RIGHT" centerShape="false" maxHeight="-Infinity" minHeight="32.0" prefHeight="50.0" prefWidth="660.0">
          <children>
             <Button maxHeight="32.0" maxWidth="50.0" minHeight="32.0" minWidth="50.0" mnemonicParsing="false" onAction="#btnDir" prefHeight="32.0" prefWidth="50.0" text="Dir" />
-            <Button maxHeight="32.0" maxWidth="50.0" minHeight="32.0" minWidth="50.0" mnemonicParsing="false" onAction="#btnResetPressed" prefHeight="32.0" prefWidth="50.0" text="Start" textAlignment="CENTER" />
+            <Button maxHeight="32.0" maxWidth="50.0" minHeight="32.0" minWidth="50.0" mnemonicParsing="false" onAction="#btnStartPressed" prefHeight="32.0" prefWidth="50.0" text="Start" textAlignment="CENTER" />
+            <Button maxHeight="32.0" minHeight="32.0" mnemonicParsing="false" onAction="#helpAction" prefHeight="32.0" text="H" />
             <GridPane maxHeight="32.0" minHeight="32.0" minWidth="400.0" prefHeight="32.0">
               <columnConstraints>
+                <ColumnConstraints />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="250.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="250.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="guessTF" maxHeight="32.0" minHeight="32.0" minWidth="200.0" onKeyPressed="#confirmGuessAction" prefHeight="32.0" prefWidth="250.0" promptText="Název">
+                  <TextField fx:id="guessTF" maxHeight="32.0" minHeight="32.0" minWidth="200.0" onKeyPressed="#confirmGuessAction" prefHeight="32.0" prefWidth="250.0" promptText="Název" GridPane.columnIndex="1">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </TextField>
-                  <ScrollPane fx:id="scrl" hbarPolicy="NEVER" maxHeight="32.0" minHeight="32.0" minWidth="200.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="200.0" vbarPolicy="NEVER" GridPane.columnIndex="1">
+                  <ScrollPane fx:id="scrl" hbarPolicy="NEVER" maxHeight="32.0" minHeight="32.0" minWidth="200.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="200.0" vbarPolicy="NEVER" GridPane.columnIndex="2">
                      <content>
                         <VBox fx:id="list" maxWidth="300.0" minHeight="32.0" minWidth="200.0" prefWidth="200.0" />
                      </content>
