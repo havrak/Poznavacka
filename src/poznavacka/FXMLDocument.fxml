@@ -19,7 +19,7 @@
          <children>
             <Button maxHeight="32.0" maxWidth="50.0" minHeight="32.0" minWidth="50.0" mnemonicParsing="false" onAction="#btnDir" prefHeight="32.0" prefWidth="50.0" text="Dir" />
             <Button maxHeight="32.0" maxWidth="50.0" minHeight="32.0" minWidth="50.0" mnemonicParsing="false" onAction="#btnStartPressed" prefHeight="32.0" prefWidth="50.0" text="Start" textAlignment="CENTER" />
-            <Button maxHeight="32.0" minHeight="32.0" mnemonicParsing="false" onAction="#helpAction" prefHeight="32.0" text="H" />
+            <Button maxHeight="32.0" maxWidth="30.0" minHeight="32.0" minWidth="30.0" mnemonicParsing="false" onAction="#helpAction" prefHeight="32.0" prefWidth="30.0" text="H" />
             <GridPane maxHeight="32.0" minHeight="32.0" minWidth="400.0" prefHeight="32.0">
               <columnConstraints>
                 <ColumnConstraints />
