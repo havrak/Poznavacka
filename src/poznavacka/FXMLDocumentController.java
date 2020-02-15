@@ -40,7 +40,10 @@ public class FXMLDocumentController {
 
 		private void update() {
 			if (Canvas != null && guessTF != null) {
-				guessTF.setMinWidth(Canvas.getWidth() - 438);
+				guessTF.setMinWidth(Canvas.getWidth() -40);
+				for (int i = 0; i < taxonomyLevel.length; i++) {
+					fields[i].setMinWidth(list.getWidth());
+				}
 			}
 			if (inGame) {
 				drawPic();
@@ -54,10 +57,14 @@ public class FXMLDocumentController {
 		}
 	}
 
-	// private final String[] taxonomyLevel = {"phylum","subphylum","division","class","subclass","order"};  // taxonomy in English (just translated form czech)
+	// taxonomy in English
+	// private final String[] taxonomyLevel = {"phylum","subphylum","division","class","subclass","order"};
 	// private final String[] taxonomyLevelAbbr = {"PL","SP","DV","CL","SL","OD"};
+
+	// taxonomy in Czech
 	private final String[] taxonomyLevel = {"kmen", "podkmen", "nadtřída", "třída", "podtřída", "řád"};
 	private final String[] taxonomyLevelAbbr = {"KM", "PK", "NT", "TR", "PT", "RA"};
+
 
 	@FXML
 	private Pane pane;
@@ -73,7 +80,7 @@ public class FXMLDocumentController {
 	@FXML
 	private TextField guessTF;
 
-	private File dir = new File("/home/havra/Documents/School/Second year/Poznávačka"); // choose your own directory
+	private File dir = new File("/home/havra/Documents/School/Second year/Poznávačka"); // Choose your own directory, program won't work if this path is not valid
 	private GraphicsContext gc;
 	private Stage stage;
 	private final ArrayList<File> picList = new ArrayList<>();
@@ -110,8 +117,9 @@ public class FXMLDocumentController {
 		for (int i = 0; i < fields.length; i++) {
 			fields[i] = new TextField();
 			fields[i].setPromptText(prompt(i));
-			fields[i].setMaxSize(200, 30);
-			fields[i].setMinSize(200, 30);
+			fields[i].setMaxSize(150, 30);
+			fields[i].setMinSize(150, 30);
+			fields[i].setMinWidth(list.getWidth());
 			fields[i].setOnKeyPressed((ke) -> {
 				switcher(ke, false);
 			});
@@ -146,6 +154,7 @@ public class FXMLDocumentController {
 
 	private void addFiles(File src) {
 		for (File f : src.listFiles()) {
+
 			if (f.isDirectory()) {
 				addFiles(f);
 			} else {
@@ -165,27 +174,6 @@ public class FXMLDocumentController {
 			}
 		}
 		return -1;
-//		for (String string : taxonomyLevelAbbr) {
-//			if(string.equals(str)){
-//			
-//			}
-//		}
-//		switch (str) {
-//			case "KM":
-//				return 0;
-//			case "PK":
-//				return 1;
-//			case "NT":
-//				return 2;
-//			case "TR":
-//				return 3;
-//			case "PT":
-//				return 4;
-//			case "RA":
-//				return 5;
-//			default:
-//				return -1;
-//		}
 	}
 
 	@FXML
@@ -288,8 +276,7 @@ public class FXMLDocumentController {
 				} else {
 					toShow.remove(0);
 					if (toShow.isEmpty()) {
-						setUp();						
-						//reset(true);
+						setUp();
 					} else {
 						setRight();
 					}
@@ -412,7 +399,7 @@ public class FXMLDocumentController {
 
 	private void drawPic() {
 		File file = toShow.get(0).get(indexOfShown);
-		if (file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg") || file.getName().toLowerCase().endsWith(".jpeg") || file.getName().toLowerCase().endsWith(".gif")) { // not totaly sure about gif
+		if (file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg") || file.getName().toLowerCase().endsWith(".jpeg") || file.getName().toLowerCase().endsWith(".gif")) {
 			Image image = new Image(file.toURI().toString());
 			double hRatio = Canvas.getWidth() / image.getWidth();
 			double vRatio = Canvas.getHeight() / image.getHeight();
@@ -422,7 +409,7 @@ public class FXMLDocumentController {
 			gc.clearRect(0, 0, Canvas.getWidth(), Canvas.getHeight());
 			gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), centerShift_x, centerShift_y, image.getWidth() * ratio, image.getHeight() * ratio);
 			gc.setFill(Color.GREEN);
-			gc.fillRect(0, 0, 60, 20);
+			gc.fillRect(0, 0, 80, 20);
 			gc.strokeText(guessedRight + "/" + listRight + '/' + amount, 5, 15);
 		}
 	}

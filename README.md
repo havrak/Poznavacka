@@ -61,3 +61,44 @@ These also don't have to contain taxonomy, you may also used them for different 
 	+ ploštice is order
 	+ 2 number of picture, as I have multiple pictures for one organism
 
+# Directory structure
+
+Program will go recursively through sub directories.
+Directory names don't affect program at all, but they should contain only images.
+
+Example of directory structure.
+
+```
+Poznávačka/
+├── Členovci
+│   ├── Klepítkatci
+│   ├── Korýši
+│   └── Vzdušnicovci
+│       ├── Mnohonozí
+│       └── Šestinozí
+├── Hlístice
+├── Kroužkovci
+├── Měkkýši
+│   ├── Chroustnatky
+│   ├── Hlavonožci
+│   ├── Mlži
+│   └── Plži
+├── Ostnokožci
+├── Ploštěnci
+├── Strunatci
+│   ├── Bezlebeční
+│   ├── Obratlovci
+│   │   ├── Bezčelistnatci
+│   │   └── Čelistnatci
+│   │       ├── Nozdratí
+│   │       ├── Obojživelníci
+│   │       ├── Paprskoploutví
+│   │       ├── Paryby
+│   │       ├── Plazi
+│   │       ├── Ptáci
+│   │       └── Savci
+│   └── Pláštěnci
+├── Vířníci
+├── Žahavci
+└── Živočišné houby
+```
