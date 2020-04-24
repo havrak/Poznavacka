@@ -1,6 +1,9 @@
 # Poznavacka is a simple program for learning names of plants or animals and theirs taxonomy
 
-Also I have setup my initial directory, need to be rewritten so path is valid, variable is called dir.
+You can set up config file which example is in src directory.
+This file should be place on Windows in user_home/AppData/Roaming/poznavacka/config and on Linux $HOME/.config/poznavacka/config.
+Its tested only on Linux and case for mac isn't implemented.
+Directory poznavacka and file config must be created by user.
 
 Program loads pictures from directory (and subdirectories), and each picture has to follow same naming scheme.
 
@@ -14,7 +17,7 @@ taxonomy is written in in form CATEGORY_ABBREVIATION.name_of_category_for_specif
 
 If category has multiple names, or you want to be able to use both English and Latin category names, you have to separate different variants with comma.
 
-Program itself can be controlled with keyboard shortcuts, these are explained in hlep promt, which you may access via H button.
+Program itself can be controlled with keyboard shortcuts, these are explained in hlep prompt, which you may access via H button.
 
 
 ## Taxonomy abbreviations

@@ -1,9 +1,14 @@
 package poznavacka;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -40,7 +45,7 @@ public class FXMLDocumentController {
 
 		private void update() {
 			if (Canvas != null && guessTF != null) {
-				guessTF.setMinWidth(Canvas.getWidth() -40);
+				guessTF.setMinWidth(Canvas.getWidth() - 40);
 				for (int i = 0; i < taxonomyLevel.length; i++) {
 					fields[i].setMinWidth(list.getWidth());
 				}
@@ -57,14 +62,8 @@ public class FXMLDocumentController {
 		}
 	}
 
-	// taxonomy in English
-	// private final String[] taxonomyLevel = {"phylum","subphylum","division","class","subclass","order"};
-	// private final String[] taxonomyLevelAbbr = {"PL","SP","DV","CL","SL","OD"};
-
-	// taxonomy in Czech
-	private final String[] taxonomyLevel = {"kmen", "podkmen", "nadtřída", "třída", "podtřída", "řád"};
-	private final String[] taxonomyLevelAbbr = {"KM", "PK", "NT", "TR", "PT", "RA"};
-
+	private String[] taxonomyLevel;
+	private String[] taxonomyLevelAbbr;
 
 	@FXML
 	private Pane pane;
@@ -75,12 +74,12 @@ public class FXMLDocumentController {
 
 	@FXML
 	private VBox list;
-	private TextField[] fields = new TextField[taxonomyLevel.length];
+	private TextField[] fields;
 
 	@FXML
 	private TextField guessTF;
 
-	private File dir = new File("/home/havra/Documents/School/Second year/Poznávačka"); // Choose your own directory, program won't work if this path is not valid
+	private File dir;
 	private GraphicsContext gc;
 	private Stage stage;
 	private final ArrayList<File> picList = new ArrayList<>();
@@ -89,7 +88,7 @@ public class FXMLDocumentController {
 	private boolean inGame = false;
 	private String rightAnswer;
 
-	private final String[] rightList = new String[taxonomyLevel.length];
+	private String[] rightList;
 	private int indexOfShown;
 	private boolean displayingAnswer = false;
 	private int guessedRight, listRight;
@@ -100,6 +99,42 @@ public class FXMLDocumentController {
 		resizableCanvas.bindWIthParent(pane);
 		this.Canvas = resizableCanvas;
 		this.stage = stage;
+		File temp;
+		if(System.getProperty("os.name").toLowerCase().contains("win")){
+			temp = new File(System.getProperty("user.home") + "/AppData/Roaming/poznavacka/config");
+		}else {
+			temp = new File(System.getProperty("user.home") + "/.config/poznavacka/config");
+		}
+		System.out.println(temp);
+		if (temp.exists()) {
+			try (BufferedReader br = new BufferedReader(new FileReader(temp))) {
+				String line;
+				while ((line = br.readLine()) != null) {
+					if (line.startsWith("dir:")) {
+						dir = new File(line.substring(line.indexOf(":") + 1, line.length()));
+					} else if (line.startsWith("lang:")) {
+						switch (line.substring(line.indexOf(":") + 1, line.length())) {
+							case "cz":
+								taxonomyLevel = new String[]{"kmen", "podkmen", "nadtřída", "třída", "podtřída", "řád"};
+								taxonomyLevelAbbr = new String[]{"KM", "PK", "NT", "TR", "PT", "RA"};
+								break;
+							case "en":
+								taxonomyLevel = new String[]{"phylum", "subphylum", "division", "class", "subclass", "order"};
+								taxonomyLevelAbbr = new String[]{"KM", "PK", "NT", "TR", "PT", "RA"};
+								break;
+							default:
+								taxonomyLevel = new String[]{"kmen", "podkmen", "nadtřída", "třída", "podtřída", "řád"};
+								taxonomyLevelAbbr = new String[]{"KM", "PK", "NT", "TR", "PT", "RA"};
+								break;
+						}
+					}
+				}
+			} catch (Exception ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		rightList = new String[taxonomyLevel.length];
+		fields = new TextField[taxonomyLevel.length];
 		gc = Canvas.getGraphicsContext2D();
 		gc.setFont(new Font(15));
 		if (taxonomyLevel.length != taxonomyLevelAbbr.length) {
@@ -114,6 +149,7 @@ public class FXMLDocumentController {
 			addFiles(dir);
 		} catch (NullPointerException e) {
 		}
+
 		for (int i = 0; i < fields.length; i++) {
 			fields[i] = new TextField();
 			fields[i].setPromptText(prompt(i));
@@ -180,7 +216,10 @@ public class FXMLDocumentController {
 	private void btnDir(ActionEvent event) {
 		DirectoryChooser dirChooser = new DirectoryChooser();
 		dirChooser.setTitle("Select File");
-		dirChooser.setInitialDirectory(new File(dir.getAbsolutePath()));
+		if (dir.exists()) {
+			System.out.println("dir exist");
+			dirChooser.setInitialDirectory(new File(dir.getAbsolutePath()));
+		}
 		File dir1 = dirChooser.showDialog(this.stage);
 		if (dir1 instanceof File) {
 			dir = dir1;
@@ -196,8 +235,10 @@ public class FXMLDocumentController {
 
 	private void setUp() {
 		if (picList.isEmpty()) {
-			guessTF.setText("Choose dir with pictures");
-			return;
+			if (dir.exists()) {
+				picList.clear();
+				addFiles(dir);
+			}
 		}
 		reset(true);
 		Random rd = new Random(System.nanoTime());
@@ -264,12 +305,12 @@ public class FXMLDocumentController {
 					}
 					if (testList()) {
 						gc.setFill(Color.GREEN);
-						gc.fillRect(Canvas.getWidth() / 2 - 145, 60, 300, 100);
+						gc.fillRect(Canvas.getWidth() / 2 - 145, 60, 300, 130);
 						gc.strokeText("Correct taxonomy", Canvas.getWidth() / 2 - 120, 75);
 						listRight++;
 					} else {
 						gc.setFill(Color.RED);
-						gc.fillRect(Canvas.getWidth() / 2 - 145, 60, 300, 100);
+						gc.fillRect(Canvas.getWidth() / 2 - 145, 60, 300, 130);
 						gc.strokeText("Wrong taxonomy, Right taxonomy:\n" + rightList(), Canvas.getWidth() / 2 - 120, 75);
 						guessTF.setText("");
 					}
